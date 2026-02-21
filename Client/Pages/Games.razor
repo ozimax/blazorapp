@@ -1,0 +1,53 @@
+@page "/games"
+
+<PageTitle>Games</PageTitle>
+
+<h1>Mortal Kombat Games</h1>
+<p>Click a game title to reveal more information.</p>
+
+<ul class="list-group">
+    @foreach (var game in games)
+    {
+        <li class="list-group-item">
+            <button type="button"
+                    class="btn btn-link p-0 text-start text-decoration-none"
+                    @onclick="() => ToggleGame(game.Title)">
+                @game.Title
+            </button>
+
+            @if (expandedGames.Contains(game.Title))
+            {
+                <p class="mt-2 mb-0">@game.Description</p>
+            }
+        </li>
+    }
+</ul>
+
+@code {
+    private readonly HashSet<string> expandedGames = new();
+
+    private readonly IReadOnlyList<GameInfo> games = new List<GameInfo>
+    {
+        new("Mortal Kombat (1992)", "The original game introduced digitized actors, brutal fatalities, and the tournament that started the rivalry between Scorpion and Sub-Zero."),
+        new("Mortal Kombat II (1993)", "A fan-favorite sequel that expanded the roster, refined gameplay, and took the fight to Outworld against Shao Kahn."),
+        new("Mortal Kombat 3 (1995)", "Introduced the run button, chain combos, and a fast-paced style while Earthrealm was invaded by Shao Kahn's forces."),
+        new("Mortal Kombat 4 (1997)", "The first major 3D-era entry, adding weapon use and transitioning the series from sprites to polygonal fighters."),
+        new("Mortal Kombat: Deadly Alliance (2002)", "Reinvented the formula with multiple fighting styles per character and a darker story centered on Shang Tsung and Quan Chi."),
+        new("Mortal Kombat: Deception (2004)", "Added interactive stages, combo breakers, and an ambitious Konquest mode that expanded Mortal Kombat lore."),
+        new("Mortal Kombat: Armageddon (2006)", "Featured nearly every character in the franchise at the time and built toward a massive final battle at the Pyramid of Argus."),
+        new("Mortal Kombat (2011)", "A reboot often called MK9, it retold the original trilogy timeline with modern mechanics and cinematic story mode."),
+        new("Mortal Kombat X (2015)", "Introduced variation-based character styles and continued the story with a new generation of fighters."),
+        new("Mortal Kombat 11 (2019)", "Focused on time-bending narrative twists, highly detailed customization, and polished competitive mechanics."),
+        new("Mortal Kombat 1 (2023)", "A universe reset by Fire God Liu Kang, rebuilding familiar characters and rivalries in a brand-new timeline.")
+    };
+
+    private void ToggleGame(string title)
+    {
+        if (!expandedGames.Add(title))
+        {
+            expandedGames.Remove(title);
+        }
+    }
+
+    private sealed record GameInfo(string Title, string Description);
+}
